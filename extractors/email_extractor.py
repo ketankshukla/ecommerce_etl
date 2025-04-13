@@ -311,7 +311,7 @@ class EmailExtractor:
                             'quantity': quantity,
                             'price': price,
                             'total': quantity * price,
-                            'order_date': date,
+                            'order_date': pd.Timestamp(date).to_pydatetime(),
                             'source_email': subject,
                             'email_type': email_type,
                             'status': 'Confirmed'
@@ -326,7 +326,7 @@ class EmailExtractor:
                         'order_id': order_id,
                         'tracking_number': tracking_number,
                         'carrier': carrier,
-                        'ship_date': date,
+                        'ship_date': pd.Timestamp(date).to_pydatetime(),
                         'source_email': subject,
                         'email_type': email_type,
                         'status': 'Shipped'
@@ -338,7 +338,7 @@ class EmailExtractor:
                     
                     data.append({
                         'order_id': order_id,
-                        'delivery_date': delivery_date,
+                        'delivery_date': pd.Timestamp(delivery_date).to_pydatetime(),
                         'source_email': subject,
                         'email_type': email_type,
                         'status': 'Delivered'
@@ -351,7 +351,7 @@ class EmailExtractor:
                     data.append({
                         'order_id': order_id,
                         'return_reason': return_reason,
-                        'return_date': date,
+                        'return_date': pd.Timestamp(date).to_pydatetime(),
                         'source_email': subject,
                         'email_type': email_type,
                         'status': 'Returned'

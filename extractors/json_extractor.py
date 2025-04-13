@@ -104,117 +104,54 @@ class JSONExtractor:
             'Toys': ['LEGO', 'Hasbro', 'Mattel', 'Fisher-Price', 'Melissa & Doug']
         }
         
-        # Generate dates for the product creation/update
-        end_date = datetime.now()
-        start_date = end_date - pd.Timedelta(days=365)
-        dates = pd.date_range(start=start_date, end=end_date, freq='D')
-        
-        # Create empty list for products
-        products = []
-        
-        # Generate random product data
-        for product_id in range(100, 300):
-            # Select random category and brand
-            category = np.random.choice(categories)
-            brand = np.random.choice(brands[category])
-            
-            # Generate product attributes based on category
-            if category == 'Electronics':
-                names = ['Smartphone', 'Laptop', 'Headphones', 'Tablet', 'Smart Watch', 'Camera', 'Speaker', 'TV']
-                name = f"{brand} {np.random.choice(names)}"
-                attributes = {
-                    "display": np.random.choice(["HD", "Full HD", "4K", "OLED", "QLED"]),
-                    "memory": f"{np.random.choice([4, 8, 16, 32, 64, 128])} GB",
-                    "storage": f"{np.random.choice([128, 256, 512, 1024])} GB",
-                    "color": np.random.choice(["Black", "Silver", "White", "Gold", "Blue"])
-                }
-            elif category == 'Clothing':
-                names = ['T-shirt', 'Jeans', 'Dress', 'Jacket', 'Socks', 'Sweater', 'Hoodie', 'Pants']
-                name = f"{brand} {np.random.choice(names)}"
-                attributes = {
-                    "size": np.random.choice(["XS", "S", "M", "L", "XL", "XXL"]),
-                    "color": np.random.choice(["Black", "White", "Blue", "Red", "Green", "Yellow", "Grey"]),
-                    "material": np.random.choice(["Cotton", "Polyester", "Wool", "Denim", "Leather"]),
-                    "gender": np.random.choice(["Men", "Women", "Unisex"])
-                }
-            elif category == 'Home & Kitchen':
-                names = ['Blender', 'Coffee Maker', 'Toaster', 'Cookware Set', 'Knife Set', 'Air Fryer', 'Mixer', 'Vacuum']
-                name = f"{brand} {np.random.choice(names)}"
-                attributes = {
-                    "color": np.random.choice(["Black", "Silver", "White", "Red", "Blue"]),
-                    "material": np.random.choice(["Stainless Steel", "Plastic", "Glass", "Ceramic", "Aluminum"]),
-                    "power": f"{np.random.choice([300, 500, 750, 1000, 1200, 1500])} W",
-                    "warranty": f"{np.random.choice([1, 2, 3, 5])} years"
-                }
-            elif category == 'Books':
-                genres = ['Fiction', 'Biography', 'Self-Help', 'Cooking', 'History', 'Science', 'Fantasy', 'Mystery']
-                genre = np.random.choice(genres)
-                name = f"{genre} Book by {brand}"
-                attributes = {
-                    "author": f"Author {np.random.randint(1, 100)}",
-                    "pages": np.random.randint(100, 500),
-                    "language": "English",
-                    "format": np.random.choice(["Hardcover", "Paperback", "Ebook", "Audiobook"]),
-                    "genre": genre
-                }
-            else:  # Toys
-                ages = ['0-2', '3-5', '6-9', '10-13', '14+']
-                names = ['Action Figure', 'Board Game', 'Puzzle', 'Stuffed Animal', 'Building Blocks', 'Doll', 'Remote Control Car']
-                name = f"{brand} {np.random.choice(names)}"
-                attributes = {
-                    "age_range": np.random.choice(ages),
-                    "material": np.random.choice(["Plastic", "Wood", "Fabric", "Metal", "Rubber"]),
-                    "batteries_required": np.random.choice([True, False]),
-                    "safety_certified": np.random.choice([True, False], p=[0.8, 0.2])
-                }
-            
-            # Generate price and stock data
-            base_price = np.random.uniform(10, 500)
-            price = round(base_price, 2)
-            sale_price = round(base_price * np.random.uniform(0.7, 0.95), 2) if np.random.random() < 0.3 else None
-            stock = np.random.randint(0, 100)
-            stock_status = "In Stock" if stock > 0 else "Out of Stock"
-            
-            # Generate dates
-            created_date = np.random.choice(dates).strftime('%Y-%m-%d')
-            updated_date = (pd.to_datetime(created_date) + pd.Timedelta(days=np.random.randint(1, 180))).strftime('%Y-%m-%d')
-            
-            # Generate product ratings
-            rating = round(np.random.uniform(1, 5), 1)
-            ratings_count = np.random.randint(0, 500)
-            
-            # Create product dictionary
-            product = {
-                "id": str(product_id),
-                "name": name,
-                "sku": f"SKU-{product_id:05d}",
-                "category": category,
-                "subcategory": attributes.get("genre") if category == "Books" else None,
-                "brand": brand,
-                "price": price,
-                "sale_price": sale_price,
-                "currency": "USD",
-                "cost": round(price * 0.6, 2),  # 60% of retail price as cost
-                "stock": stock,
-                "stock_status": stock_status,
-                "attributes": attributes,
-                "description": f"This is a {name} from {brand}. It is a high-quality product in the {category} category.",
-                "tags": [category, brand, name.split()[-1]],
-                "created_at": created_date,
-                "updated_at": updated_date,
-                "rating": rating,
-                "ratings_count": ratings_count,
-                "is_featured": np.random.choice([True, False], p=[0.1, 0.9]),
-                "is_active": np.random.choice([True, False], p=[0.9, 0.1])
-            }
-            
-            products.append(product)
-        
-        # Ensure the directory exists
+        # Generate sample product data in a straightforward way without numpy data types
+        # Ensure directory exists
         os.makedirs(os.path.dirname(self.source_file), exist_ok=True)
         
-        # Save to JSON file
-        with open(self.source_file, 'w') as f:
-            json.dump(products, f, indent=2)
+        # Create a list to store products
+        products = []
         
-        logger.info(f"Created sample e-commerce product data: {self.source_file}")
+        # Generate 100 simple product records
+        for i in range(100, 200):
+            product_id = i
+            category = categories[i % len(categories)]
+            brand = brands[category][i % len(brands[category])]
+            
+            # Create a simple product dictionary with standard Python types
+            product = {
+                "id": str(product_id),
+                "name": f"{brand} Product {i}",
+                "category": category,
+                "brand": brand,
+                "price": float(50 + (i % 10) * 10),
+                "stock": int(10 + (i % 5) * 5),
+                "created_date": (datetime.now() - timedelta(days=i % 30)).strftime("%Y-%m-%d"),
+                "description": f"This is a sample {category} product from {brand}."
+            }
+            
+            # Add some category-specific attributes as simple strings and numbers
+            if category == "Electronics":
+                product["attributes"] = {
+                    "type": "Smartphone" if i % 3 == 0 else "Laptop",
+                    "color": "Black" if i % 2 == 0 else "Silver",
+                    "memory": "8 GB" if i % 2 == 0 else "16 GB"
+                }
+            elif category == "Clothing":
+                product["attributes"] = {
+                    "size": "M" if i % 3 == 0 else "L",
+                    "color": "Blue" if i % 2 == 0 else "Black",
+                }
+            else:
+                product["attributes"] = {
+                    "feature": f"Feature {i % 5 + 1}"
+                }
+                
+            products.append(product)
+        
+        # Write JSON to file
+        try:
+            with open(self.source_file, 'w') as f:
+                json.dump(products, f, indent=4)
+            logger.info(f"Created sample e-commerce product data: {self.source_file}")
+        except Exception as e:
+            logger.error(f"Error creating sample JSON file: {str(e)}")

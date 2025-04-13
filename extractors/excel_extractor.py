@@ -160,7 +160,9 @@ class ExcelExtractor:
                 phone = f"({np.random.randint(100, 999)}) {np.random.randint(100, 999)}-{np.random.randint(1000, 9999)}"
                 
                 # Registration date and demographics
-                registration_date = registration_dates[i]
+                registration_date_np = registration_dates[i]
+                # Convert numpy.datetime64 to Python datetime via pandas Timestamp
+                registration_date = pd.Timestamp(registration_date_np).to_pydatetime()
                 segment = np.random.choice(segments, p=segment_probs)
                 country = np.random.choice(countries, p=country_probs)
                 

@@ -247,7 +247,7 @@ class FTPExtractor:
                         # Add to data list
                         data.append({
                             'order_id': order_id,
-                            'order_date': date.strftime('%Y-%m-%d'),
+                            'order_date': pd.Timestamp(date).to_pydatetime().strftime('%Y-%m-%d'),
                             'partner_id': partner,
                             'product_category': category,
                             'quantity': quantity,

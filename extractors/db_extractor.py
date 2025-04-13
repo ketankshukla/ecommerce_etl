@@ -160,7 +160,9 @@ class DBExtractor:
         # Generate random historical sales data
         order_id = 1000
         for _ in range(1000):  # Generate 1000 historical orders
-            order_date = np.random.choice(dates)
+            order_date_np = np.random.choice(dates)
+            # Convert numpy.datetime64 to Python datetime via pandas Timestamp
+            order_date = pd.Timestamp(order_date_np).to_pydatetime()
             # More recent dates should be more common
             days_ago = (end_date - order_date).days
             if np.random.random() > days_ago / 730:  # Probability decreases with age
@@ -209,7 +211,8 @@ class DBExtractor:
             if customer_id % 10 == 0:  # Only create records for some customers
                 continue
                 
-            registration_date = np.random.choice(dates)
+            registration_date_np = np.random.choice(dates)
+            registration_date = pd.Timestamp(registration_date_np).to_pydatetime()
             last_purchase_date = registration_date + pd.Timedelta(days=np.random.randint(1, 365))
             if last_purchase_date > end_date:
                 last_purchase_date = registration_date
